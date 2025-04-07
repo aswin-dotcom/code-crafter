@@ -1,35 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useEffect, useState } from "react";
+import Editor from "./Components/Editor";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [html, setHtml] = useState("");
+  const [css, setCss] = useState("");
+  const [Js, setJs] = useState("");
+  const[srcDoc,setSrcDoc] = useState('');
+  useEffect(()=>{
+    setSrcDoc(`
+      <html>
+      <body>${html}</body>
+      <style>${css}</style>
+      <script>${Js}</script>
+      </html>`)
+
+  },[html,css,Js])
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div>
+      <div className="panel top-panel">
+        <Editor title="HTML" language="xml" value={html} onChange={setHtml} />
+        <Editor title="CSS" language="css" value={css} onChange={setCss} />
+        <Editor title="JS" language="javascript" value={Js} onChange={setJs} />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+      <div className="panel">
 
-export default App
+        <iframe srcDoc={srcDoc} title="Output" sandbox="allow-scripts"  width="100%" height="100%" />
+      </div>
+    </div>
+  );
+};
+
+export default App;
